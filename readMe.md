@@ -8,13 +8,6 @@
 ## Use:
 - [Webpack](https://github.com/webpack/webpack)
 - [React](https://github.com/facebook/react)
+- [Redux](https://github.com/reactjs/redux)
 - [Babel](https://github.com/babel/babel)
-- [Material-ui](http://www.material-ui.com/#/components/app-bar)
 - [Eslint](http://eslint.org/)
-
-## Fixtures:
-- Hot live reload
-- Es6/Es7 compile with transpileur
-- Bundle chuncked externals ressource and your code
-- Sass compiler
-- Google material components

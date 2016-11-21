@@ -1,78 +1,68 @@
-'use strict'; //eslint-disable-line strict
-
 const webpack = require('webpack');
-const production = process.env.NODE_ENV === 'production';
+const production = process.env.NODE_ENV === 'production'; //eslint-disable-line no-process-env
+const path = require('path');
 
 const paths = {
-  'dist': './client/dist',
-  'src': './client/src'
+  build: path.resolve(__dirname, './build'),
+  src: path.resolve(__dirname, './src')
 };
 
 let plugins = [
-  new webpack.optimize.CommonsChunkPlugin({
-    'name': 'externals',
-    'filename': 'scripts/externals.bundle.js',
-    'minChunks': 3,
-    'chunks': ['app', 'externals']
-  }),
-  new webpack.optimize.DedupePlugin()
+  new webpack.ProvidePlugin({ fetch: 'imports?this=>global!exports?global.fetch!isomorphic-fetch' }),
+  new webpack.DefinePlugin({ 'process.env': { NODE_ENV: `'${production || 'development'}'` }})
 ];
 
 if(production){
-  
-  plugins = plugins.concat(new webpack.optimize.UglifyJsPlugin({
-    'output': {
-      'comments': false
-    },
-    'compress': {
-      'warnings': false
-    }
-  }) );
-  
+
+  plugins = plugins.concat(
+    new webpack.optimize.UglifyJsPlugin({
+      output: { comments: false },
+      compress: { warnings: false }
+    }),
+    new webpack.optimize.DedupePlugin()
+  );
+
 }
 
 const webpackConfig = {
-  'entry': {
-    'app': [`${paths.src}/app.js`, `${paths.src}/index.html`],
-    'externals': [
-      'react',
-      'react-dom',
-      'd3',
-      'react-tap-event-plugin',
-      'material-ui/lib/app-bar',
-      'material-ui/lib/svg-icons/navigation/close',
-      'material-ui/lib/menus/icon-menu',
-      'material-ui/lib/svg-icons/navigation/more-vert',
-      'material-ui/lib/menus/menu-item'
-    ]
+  entry: { app: [`${paths.src}/index.js`, `${paths.src}/index.html`]},
+  output: {
+    path: paths.build,
+    filename: 'scripts/[name].bundle.js'
   },
-  'output': {
-    'path': paths.dist,
-    'filename': 'scripts/app.bundle.js',
-    'hash': true
-  },
-  'module': {
-    'loaders': [
-      {
-        'test': /.jsx?$/,
-        'loader': 'babel-loader',
-        'exclude': /node_modules/,
-        'query': {
-          'presets': ['es2015', 'react']
-        }
-      },
-      {
-        'test': /\.html$/,
-        'loader': 'file?name=[name].[ext]'
-      },
-      {
-        'test': /\.scss$/,
-        'loaders': ['style', 'css', 'sass']
+  module: { loaders: [
+    {
+      test: /.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/,
+      query: {
+        cacheDirectory: true,
+        presets: ['react', 'es2015', 'es2016', 'es2017'],
+        plugins: [
+          'transform-runtime',
+          'transform-decorators-legacy',
+          'transform-class-properties'
+        ]
       }
-    ]
-  },
-  'colors': true,
-  'plugins': plugins
+    },
+    {
+      test: /\.html/,
+      loader: 'file-loader?name=[name].[ext]'
+    },
+    {
+      test: /\.json/,
+      loader: 'json-loader'
+    },
+    {
+      test: /\.(?:png|jpg|gif)$/,
+      loader: 'file-loader?name=img/[hash:6].[ext]'
+    },
+    {
+      test: /\.scss$/,
+      loader: 'style-loader!css-loader!sass-loader'
+    }
+  ]},
+  plugins: plugins
 };
 
 module.exports = webpackConfig;

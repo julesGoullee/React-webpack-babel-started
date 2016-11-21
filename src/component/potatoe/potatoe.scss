@@ -1,0 +1,13 @@
+.potatoe-container {
+  color: #4e4d40;
+  display: flex;
+  justify-content: center;
+  .potatoe-img{
+    width: 75px;
+    height: 75px;
+  }
+  .potatoe-name{
+    width: 200px;
+  }
+}
+
