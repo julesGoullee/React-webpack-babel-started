@@ -147,7 +147,7 @@ module.exports = {
     'no-useless-concat': 2,                       // disallow unnecessary concatenation of literals or template literals
     'no-useless-escape': 2,                       // disallow unnecessary escape characters
     'no-void': 2,                                 // disallow use of void operator
-    'no-warning-comments': 1,                     // disallow usage of configurable warning terms in comments
+    'no-warning-comments': 2,                     // disallow usage of configurable warning terms in comments
     'no-with': 2,                                 // disallow use of the with statement
     'radix': 2,                                   // require use of the second argument for parseInt()
     'vars-on-top': 2,                             // requires to declare all vars on top of their containing scope
@@ -395,7 +395,7 @@ module.exports = {
 
     ////////// PLUGINS //////////
 
-    'no-async-without-await/no-async-without-await': 1,
+    'no-async-without-await/no-async-without-await': 2,
 
     // Eslint-plugin-babel
     'babel/new-cap': 2,
